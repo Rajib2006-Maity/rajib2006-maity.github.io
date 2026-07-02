@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rajib Maity — Front-End Developer & AI/ML Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B1220;
+    --panel:#111A2C;
+    --panel-hi:#16223A;
+    --line:#26324A;
+    --text:#E8ECF2;
+    --muted:#8891A5;
+    --gain:#3ED598;
+    --gain-dim:#1F5E48;
+    --amber:#F2B84B;
+    --display: 'Space Grotesk', sans-serif;
+    --body: 'Inter', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--text);
+    font-family:var(--body);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  a{color:inherit; text-decoration:none;}
+  ::selection{background:var(--gain); color:var(--ink);}
+
+  /* subtle grid texture */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:64px 64px;
+    opacity:0.06;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .wrap{max-width:1080px; margin:0 auto; padding:0 28px; position:relative; z-index:1;}
+
+  /* ---------- Ticker bar ---------- */
+  .ticker-bar{
+    background:var(--panel);
+    border-bottom:1px solid var(--line);
+    overflow:hidden;
+    white-space:nowrap;
+    padding:8px 0;
+    position:sticky; top:0; z-index:50;
+  }
+  .ticker-track{
+    display:inline-flex;
+    animation:scroll-ticker 32s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce){ .ticker-track{animation:none;} }
+  .ticker-track span{
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--muted);
+    padding:0 22px;
+    border-right:1px solid var(--line);
+    letter-spacing:0.02em;
+  }
+  .ticker-track span b{color:var(--gain); font-weight:600;}
+  @keyframes scroll-ticker{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+
+  /* ---------- Nav ---------- */
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:22px 0;
+  }
+  .logo{
+    font-family:var(--mono); font-weight:600; font-size:15px;
+    letter-spacing:0.04em;
+    display:flex; align-items:center; gap:8px;
+  }
+  .logo .dot{width:8px; height:8px; border-radius:50%; background:var(--gain); box-shadow:0 0 8px var(--gain);}
+  .nav-links{display:flex; gap:30px; font-family:var(--mono); font-size:13px; color:var(--muted);}
+  .nav-links a:hover{color:var(--gain);}
+  .nav-cta{
+    font-family:var(--mono); font-size:12.5px; color:var(--ink); background:var(--gain);
+    padding:8px 16px; border-radius:3px; font-weight:600;
+  }
+  .nav-cta:hover{background:#5be0ab;}
+  @media(max-width:720px){.nav-links{display:none;}}
+
+  /* ---------- Hero ---------- */
+  header.hero{padding:70px 0 60px; position:relative;}
+  .eyebrow{
+    font-family:var(--mono); font-size:12.5px; color:var(--amber);
+    letter-spacing:0.12em; text-transform:uppercase; margin-bottom:18px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:"//"; color:var(--muted);}
+  h1{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:clamp(40px, 7vw, 74px);
+    line-height:1.02;
+    letter-spacing:-0.02em;
+    margin-bottom:20px;
+  }
+  h1 .accent{color:var(--gain);}
+  .role-line{
+    font-family:var(--mono); font-size:15px; color:var(--muted);
+    margin-bottom:28px; max-width:620px;
+  }
+  .summary{
+    max-width:640px; color:var(--text); font-size:16px; margin-bottom:36px;
+  }
+  .hero-actions{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:56px;}
+  .btn-primary, .btn-ghost{
+    font-family:var(--mono); font-size:13px; padding:12px 22px; border-radius:3px;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-primary{background:var(--gain); color:var(--ink); font-weight:600;}
+  .btn-primary:hover{background:#5be0ab;}
+  .btn-ghost{border:1px solid var(--line); color:var(--text);}
+  .btn-ghost:hover{border-color:var(--gain); color:var(--gain);}
+
+  /* KPI dashboard strip */
+  .kpi-grid{
+    display:grid; grid-template-columns:repeat(4, 1fr); gap:1px;
+    background:var(--line); border:1px solid var(--line); border-radius:6px; overflow:hidden;
+  }
+  .kpi{
+    background:var(--panel); padding:22px 20px;
+  }
+  .kpi-label{font-family:var(--mono); font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:10px;}
+  .kpi-value{font-family:var(--display); font-size:26px; font-weight:600;}
+  .kpi-value .delta{font-family:var(--mono); font-size:12px; color:var(--gain); margin-left:6px;}
+  @media(max-width:720px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
+
+  /* ---------- Section shell ---------- */
+  section{padding:80px 0; border-top:1px solid var(--line); position:relative;}
+  .section-head{display:flex; align-items:baseline; gap:16px; margin-bottom:40px;}
+  .section-tag{font-family:var(--mono); font-size:12px; color:var(--gain);}
+  .section-title{font-family:var(--display); font-size:clamp(26px,4vw,34px); font-weight:600;}
+
+  /* ---------- About ---------- */
+  .about-grid{display:grid; grid-template-columns:1.4fr 1fr; gap:56px;}
+  @media(max-width:800px){.about-grid{grid-template-columns:1fr;}}
+  .about-grid p{color:var(--text); font-size:15.5px; margin-bottom:16px; max-width:56ch;}
+  .lang-list{display:flex; flex-direction:column; gap:14px;}
+  .lang-row{display:flex; justify-content:space-between; font-family:var(--mono); font-size:13.5px; border-bottom:1px dashed var(--line); padding-bottom:10px;}
+  .lang-row span:last-child{color:var(--gain);}
+  .edu-card{
+    margin-top:22px; padding:18px; border:1px solid var(--line); border-radius:6px; background:var(--panel);
+  }
+  .edu-card .school{font-family:var(--display); font-weight:600; font-size:15px; margin-bottom:4px;}
+  .edu-card .deg{color:var(--muted); font-size:13.5px; font-family:var(--mono);}
+
+  /* ---------- Experience (terminal log) ---------- */
+  .term{
+    background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden;
+  }
+  .term-head{
+    background:var(--panel-hi); padding:10px 16px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--line);
+  }
+  .term-head .tdot{width:10px; height:10px; border-radius:50%;}
+  .term-head .tdot:nth-child(1){background:#F2554B;}
+  .term-head .tdot:nth-child(2){background:var(--amber);}
+  .term-head .tdot:nth-child(3){background:var(--gain);}
+  .term-head .tname{font-family:var(--mono); font-size:12px; color:var(--muted); margin-left:8px;}
+  .term-body{padding:26px 26px 30px; font-family:var(--mono); font-size:13.5px;}
+  .term-body .role{font-family:var(--display); font-size:20px; font-weight:600; color:var(--text); margin-bottom:2px;}
+  .term-body .meta{color:var(--muted); margin-bottom:20px; font-size:12.5px;}
+  .term-body .meta b{color:var(--amber); font-weight:500;}
+  .term-line{display:flex; gap:12px; margin-bottom:13px; color:var(--text); line-height:1.55;}
+  .term-line::before{content:"$"; color:var(--gain); flex-shrink:0;}
+
+  /* ---------- Skills ---------- */
+  .skill-cat{margin-bottom:26px;}
+  .skill-cat-name{font-family:var(--mono); font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:12px;}
+  .chip-row{display:flex; flex-wrap:wrap; gap:9px;}
+  .chip{
+    font-family:var(--mono); font-size:13px; padding:7px 13px; border:1px solid var(--line); border-radius:4px; color:var(--text);
+    transition:border-color .15s, color .15s;
+  }
+  .chip:hover{border-color:var(--gain); color:var(--gain);}
+  .chip.top{border-color:var(--gain-dim); color:var(--gain); background:rgba(62,213,152,0.06);}
+
+  /* ---------- Projects ---------- */
+  .proj-grid{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+  @media(max-width:800px){.proj-grid{grid-template-columns:1fr;}}
+  .proj-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:26px; display:flex; flex-direction:column;
+    transition:transform .18s, border-color .18s;
+  }
+  .proj-card:hover{transform:translateY(-3px); border-color:var(--gain-dim);}
+  .proj-card.flagship{grid-column:1 / -1; border-color:var(--gain-dim); background:linear-gradient(135deg, var(--panel) 60%, var(--panel-hi));}
+  .proj-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
+  .proj-name{font-family:var(--display); font-size:18px; font-weight:600;}
+  .proj-flag{font-family:var(--mono); font-size:10.5px; color:var(--ink); background:var(--gain); padding:3px 8px; border-radius:3px; letter-spacing:0.05em;}
+  .proj-stack{font-family:var(--mono); font-size:11.5px; color:var(--amber); margin-bottom:14px;}
+  .proj-desc{font-size:14px; color:var(--text); opacity:0.9; margin-bottom:0;}
+  .candlesticks{display:flex; align-items:flex-end; gap:4px; height:34px; margin:16px 0 4px;}
+  .candlesticks i{display:block; width:4px; background:var(--gain-dim); border-radius:1px;}
+  .candlesticks i.up{background:var(--gain);}
+
+  /* ---------- Certifications & strengths ---------- */
+  .two-col{display:grid; grid-template-columns:1fr 1fr; gap:56px;}
+  @media(max-width:800px){.two-col{grid-template-columns:1fr;}}
+  .cert-list{list-style:none;}
+  .cert-list li{
+    display:flex; gap:12px; padding:12px 0; border-bottom:1px solid var(--line); font-size:14.5px;
+  }
+  .cert-list li::before{content:"✓"; color:var(--gain); font-family:var(--mono); font-weight:600;}
+  .strength-grid{display:flex; flex-wrap:wrap; gap:10px;}
+  .strength-grid span{
+    font-family:var(--mono); font-size:13px; border:1px solid var(--line); padding:9px 14px; border-radius:20px;
+  }
+
+  /* ---------- Footer / contact ---------- */
+  footer{padding:80px 0 50px; border-top:1px solid var(--line); text-align:center;}
+  footer .section-tag{display:block; margin-bottom:10px;}
+  footer h2{font-family:var(--display); font-size:clamp(30px,5vw,48px); font-weight:700; margin-bottom:26px;}
+  .contact-row{display:flex; justify-content:center; gap:24px; flex-wrap:wrap; font-family:var(--mono); font-size:14px; margin-bottom:40px;}
+  .contact-row a{border-bottom:1px solid var(--line); padding-bottom:2px;}
+  .contact-row a:hover{color:var(--gain); border-color:var(--gain);}
+  .fine{font-family:var(--mono); font-size:11.5px; color:var(--muted);}
+
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+  @media (prefers-reduced-motion: reduce){ .reveal{opacity:1; transform:none; transition:none;} }
+</style>
+</head>
+<body>
+
+<div class="ticker-bar">
+  <div class="ticker-track" id="tickerTrack"></div>
+</div>
+
+<div class="wrap">
+  <nav>
+    <div class="logo"><span class="dot"></span>RAJIB.MAITY</div>
+    <div class="nav-links">
+      <a href="#about">about</a>
+      <a href="#experience">experience</a>
+      <a href="#skills">skills</a>
+      <a href="#projects">projects</a>
+      <a href="#contact">contact</a>
+    </div>
+    <a class="nav-cta" href="mailto:rajibmaity016@gmail.com">hire_me()</a>
+  </nav>
+
+  <header class="hero">
+    <div class="eyebrow">available for placement · greater kolkata area</div>
+    <h1>Rajib Maity<br>builds interfaces<span class="accent">.</span> trains models<span class="accent">.</span></h1>
+    <div class="role-line">B.Tech CSE (AI &amp; ML), IEM Kolkata · Front-End Developer · React &amp; JavaScript Enthusiast</div>
+    <p class="summary">I ship responsive, component-driven front ends and pair them with the data pipelines and ML models behind them. During my internship at Bluestock Fintech I took a stock-analysis product from raw NSE data to a deployed REST API — now looking for a full-time role to do that end-to-end again, at scale.</p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="#projects">view_projects →</a>
+      <a class="btn-ghost" href="#contact">get in touch</a>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="kpi-label">Model accuracy</div>
+        <div class="kpi-value">0.9764<span class="delta">R²</span></div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Records analyzed</div>
+        <div class="kpi-value">6,264<span class="delta">▲</span></div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">API endpoints shipped</div>
+        <div class="kpi-value">8<span class="delta">live</span></div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">ML models trained</div>
+        <div class="kpi-value">24<span class="delta">▲</span></div>
+      </div>
+    </div>
+  </header>
+
+  <section id="about">
+    <div class="section-head"><span class="section-tag">01</span><span class="section-title">About</span></div>
+    <div class="about-grid reveal">
+      <div>
+        <p>I'm an AI &amp; Machine Learning undergraduate at the Institute of Engineering &amp; Management, Kolkata, with a front end that's grown alongside my data science skills rather than in spite of them. I like the seam between the two: a clean React component sitting on top of a model that actually works.</p>
+        <p>My internship at Bluestock Fintech pushed that further — building the analysis, the models, and the API that served them, then documenting and deploying the whole thing. I'm now looking for a placement where I can keep working across that full stack.</p>
+        <div class="edu-card">
+          <div class="school">Institute of Engineering &amp; Management (IEM)</div>
+          <div class="deg">B.Tech — CSE, AI &amp; Machine Learning · Kolkata, India · Jul 2024 – Aug 2028</div>
+        </div>
+      </div>
+      <div>
+        <div class="skill-cat-name">Languages spoken</div>
+        <div class="lang-list">
+          <div class="lang-row"><span>Bengali</span><span>Native</span></div>
+          <div class="lang-row"><span>Hindi</span><span>Fluent</span></div>
+          <div class="lang-row"><span>English</span><span>Professional</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="section-head"><span class="section-tag">02</span><span class="section-title">Experience</span></div>
+    <div class="term reveal">
+      <div class="term-head">
+        <span class="tdot"></span><span class="tdot"></span><span class="tdot"></span>
+        <span class="tname">bluestock_fintech — internship.log</span>
+      </div>
+      <div class="term-body">
+        <div class="role">Data Analyst Intern</div>
+        <div class="meta">Bluestock Fintech · Remote · <b>May 2026 – Jul 2026</b></div>
+        <div class="term-line">Built an end-to-end stock market analysis pipeline on 12 NSE stocks (6,264 records) using Python, Pandas &amp; SQLite — delivered 10 EDA charts and 10 SQL business queries.</div>
+        <div class="term-line">Trained 24 ML regression models (Linear Regression &amp; Random Forest) per stock for next-day price prediction, reaching R² up to 0.9764 on INFY.</div>
+        <div class="term-line">Developed a production-ready Flask REST API with 8 endpoints, deployed to Render (Procfile + Dockerfile) — documented with a full report, presentation, and deployment guide.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="section-head"><span class="section-tag">03</span><span class="section-title">Skills</span></div>
+    <div class="reveal">
+      <div class="skill-cat">
+        <div class="skill-cat-name">Top skills</div>
+        <div class="chip-row">
+          <span class="chip top">AI Automation</span>
+          <span class="chip top">Agentic AI Development</span>
+          <span class="chip top">React Native</span>
+        </div>
+      </div>
+      <div class="skill-cat">
+        <div class="skill-cat-name">Languages</div>
+        <div class="chip-row">
+          <span class="chip">C</span><span class="chip">C++</span><span class="chip">JavaScript (ES6+)</span><span class="chip">Python</span><span class="chip">SQL</span>
+        </div>
+      </div>
+      <div class="skill-cat">
+        <div class="skill-cat-name">Front-end</div>
+        <div class="chip-row">
+          <span class="chip">HTML5</span><span class="chip">CSS3</span><span class="chip">React.js (Hooks)</span><span class="chip">Responsive Design</span>
+        </div>
+      </div>
+      <div class="skill-cat">
+        <div class="skill-cat-name">Data &amp; ML</div>
+        <div class="chip-row">
+          <span class="chip">Pandas</span><span class="chip">NumPy</span><span class="chip">Scikit-learn</span><span class="chip">Matplotlib</span><span class="chip">Seaborn</span><span class="chip">SQLite</span><span class="chip">Flask</span>
+        </div>
+      </div>
+      <div class="skill-cat">
+        <div class="skill-cat-name">Tools</div>
+        <div class="chip-row">
+          <span class="chip">Git</span><span class="chip">GitHub</span><span class="chip">VS Code</span><span class="chip">Docker (basic)</span><span class="chip">MySQL</span><span class="chip">Unit &amp; Integration Testing</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="section-head"><span class="section-tag">04</span><span class="section-title">Projects</span></div>
+    <div class="proj-grid reveal">
+
+      <div class="proj-card flagship">
+        <div class="proj-top">
+          <div class="proj-name">Indian Stock Market Analysis</div>
+          <div class="proj-flag">flagship</div>
+        </div>
+        <div class="proj-stack">Python · Flask · Scikit-learn · SQLite</div>
+        <div class="candlesticks">
+          <i style="height:14px"></i><i class="up" style="height:26px"></i><i style="height:10px"></i><i class="up" style="height:32px"></i><i class="up" style="height:20px"></i><i style="height:16px"></i><i class="up" style="height:28px"></i><i class="up" style="height:34px"></i>
+        </div>
+        <p class="proj-desc">End-to-end capstone built during the Bluestock Fintech internship: EDA across 10 charts, 10 SQL business queries, ML price prediction (Linear Regression + Random Forest, R² = 0.9764), and a Flask REST API with 8 endpoints.</p>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-top"><div class="proj-name">Weather Dashboard</div></div>
+        <div class="proj-stack">JavaScript · REST API</div>
+        <p class="proj-desc">Real-time weather dashboard pulling live data from a public API, with location-based search, graceful error handling, and a fully responsive UI.</p>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-top"><div class="proj-name">React Single-Page Application</div></div>
+        <div class="proj-stack">React.js · Hooks</div>
+        <p class="proj-desc">A responsive SPA built from reusable components with useState/useEffect and optimised rendering — a working demonstration of component-based architecture and state management.</p>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-top"><div class="proj-name">To-Do List &amp; Calculator</div></div>
+        <div class="proj-stack">JavaScript · DOM</div>
+        <p class="proj-desc">Two mobile-first utility apps: real-time task CRUD via DOM manipulation, and a calculator with clean keyboard and touch event handling.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="certs">
+    <div class="section-head"><span class="section-tag">05</span><span class="section-title">Certifications &amp; strengths</span></div>
+    <div class="two-col reveal">
+      <div>
+        <div class="skill-cat-name">Certifications &amp; achievements</div>
+        <ul class="cert-list">
+          <li>Software Engineering — IBM, 2025</li>
+          <li>Introduction to AI — IBM, 2025</li>
+          <li>Responsive Web Design — freeCodeCamp, 2026</li>
+          <li>Bluestock Fintech Internship, 2026</li>
+          <li>4+ GitHub repositories, active contributor</li>
+          <li>Hackathon &amp; coding competition participant (Web + AI)</li>
+        </ul>
+      </div>
+      <div>
+        <div class="skill-cat-name">Key strengths</div>
+        <div class="strength-grid">
+          <span>Fast Learner</span><span>Problem Solver</span><span>Team Player</span>
+          <span>Attention to Detail</span><span>Clean Code</span><span>User-Centric Design</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <span class="section-tag">06 // let's talk</span>
+    <h2>Open to placement<br>opportunities.</h2>
+    <div class="contact-row">
+      <a href="mailto:rajibmaity016@gmail.com">rajibmaity016@gmail.com</a>
+      <a href="https://linkedin.com/in/rajibmaity" target="_blank" rel="noopener">linkedin.com/in/rajibmaity</a>
+      <a href="https://github.com/Rajib2006-Maity" target="_blank" rel="noopener">github.com/Rajib2006-Maity</a>
+    </div>
+    <div class="fine">Kolkata, India · Declaration: all information above is true and correct to the best of my knowledge.</div>
+  </footer>
+</div>
+
+<script>
+  // Build ticker content from resume highlights, duplicated for seamless loop
+  const items = [
+    "R² 0.9764 on INFY next-day price prediction",
+    "6,264 NSE records processed across 12 stocks",
+    "24 ML regression models trained",
+    "8 Flask REST API endpoints deployed",
+    "10 EDA charts · 10 SQL business queries",
+    "IBM certified — Software Engineering & Intro to AI",
+    "Open to placement — Greater Kolkata Area"
+  ];
+  const track = document.getElementById('tickerTrack');
+  const build = () => items.map(t => `<span><b>▲</b> ${t}</span>`).join('');
+  track.innerHTML = build() + build();
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
+  }, {threshold:0.15});
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
